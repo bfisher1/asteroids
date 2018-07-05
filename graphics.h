@@ -65,4 +65,16 @@ void drawRect(SDL_Surface* screen, int x, int y, int width, int height, Color co
 */
 void updateScreen(SDL_Surface* screen);
 
+/**
+    Draws a circle to the given screen. Uses code and algorithm from
+    https://en.wikipedia.org/wiki/Midpoint_circle_algorithm.
+
+    @param screen the screen that the circle is being drawn on
+    @param x0 the x coordinate at the center of the circle
+    @param y0 the y coordinate at the center of the circle
+    @param r the radius of the circle being drawn
+    @param color the color being drawn
+*/
+void drawCircle(SDL_Surface* screen, int x0, int y0, int r, Color color);
+
 #endif /* GRAPHICS_H */

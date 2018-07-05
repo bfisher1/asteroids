@@ -42,12 +42,12 @@ void drawObject(Object *object, SDL_Surface* screen) {
     }
 }
 
-void forwardObject(Object *object) {
+void forwardObject(Object *object, SDL_Surface* screen) {
     object->center.x +=  object->velocity * cos( object->direction );
     object->center.y +=  object->velocity * sin( object->direction );
 }
 
-void reverseObject(Object *object) {
+void reverseObject(Object *object, SDL_Surface* screen) {
     object->center.x -= object->velocity * cos( object->direction );
     object->center.y -= object->velocity * sin( object->direction );
 }
@@ -68,6 +68,8 @@ void rotateObject(Object *object, float radians) {
 }
 
 bool isPtInObject(Point *point, Object (object)) {
+    //loop throught lines, find out if pt is beween line
+    //and center point
     return false;
 }
 

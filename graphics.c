@@ -8,13 +8,16 @@
 #include "graphics.h"
 
 void setpixel(SDL_Surface *screen, int x, int y, Color color ) {
-    Uint32 *pixmem32;
-    Uint32 colour;  
- 
-    colour = SDL_MapRGB( screen->format, color.r, color.g, color.b );
-  
-    pixmem32 = (Uint32*) screen->pixels  + y + x;
-    *pixmem32 = colour;
+    int yInv = y * BPP / screen->pitch;
+    if(0 <= x && x < screen->w && 0 <= yInv && yInv < screen->h){
+        Uint32 *pixmem32;
+        Uint32 colour;  
+    
+        colour = SDL_MapRGB( screen->format, color.r, color.g, color.b );
+        
+        pixmem32 = (Uint32*) screen->pixels  + y + x;
+        *pixmem32 = colour;
+    }
 }
 
 void drawLine(SDL_Surface* screen, int x1, int y1, int x2, int y2, Color color) {
@@ -41,7 +44,7 @@ void drawLine(SDL_Surface* screen, int x1, int y1, int x2, int y2, Color color) 
     y = y1;
     for (int i = 1; i <= step; i++) {
         ytimesw = ((int) y)*screen->pitch/BPP;
-        if(0 <= x && x < screen->w && 0 <= y && y < screen->h){
+        if(0 <= x && x < screen->w && 0 <= y && y < screen->h) {
             setpixel(screen, (int) x, (int) ytimesw, color); 
         }
         x += dx;
@@ -79,4 +82,35 @@ void updateScreen(SDL_Surface* screen) {
     if(SDL_MUSTLOCK(screen)) SDL_UnlockSurface(screen);
   
     SDL_Flip(screen); 
+}
+
+void drawCircle(SDL_Surface* screen, int x0, int y0, int r, Color color) {
+    int x = r - 1;
+    int y = 0;
+    int dx = 1;
+    int dy = 1;
+    int err = dx - (r << 1);
+    while (x >= y){
+        setpixel(screen, x0 + x, (y0 + y) * screen->pitch/BPP, color);
+        setpixel(screen, x0 + y, (y0 + x) * screen->pitch/BPP, color);
+        setpixel(screen, x0 - y, (y0 + x) * screen->pitch/BPP, color);
+        setpixel(screen, x0 - x, (y0 + y) * screen->pitch/BPP, color);
+        setpixel(screen, x0 - x, (y0 - y) * screen->pitch/BPP, color);
+        setpixel(screen, x0 - y, (y0 - x) * screen->pitch/BPP, color);
+        setpixel(screen, x0 + y, (y0 - x) * screen->pitch/BPP, color);
+        setpixel(screen, x0 + x, (y0 - y) * screen->pitch/BPP, color);
+        
+        if (err <= 0){
+            y++;
+            err += dy;
+            dy += 2;
+        }
+
+        if (err > 0){
+            x--;
+            dx += 2;
+            err += dx - (r << 1);
+        }
+    }
+
 }

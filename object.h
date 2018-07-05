@@ -14,15 +14,6 @@
 #define OBJECT_H
 
 /**
-    Enumeration for asteroid sizes.
-*/
-typedef enum {
-    bigAst,
-    mediumAst,
-    smallAst
-} AsteroidSize;
-
-/**
     Structure for a cartesian point.
 */
 typedef struct {
@@ -86,15 +77,17 @@ void drawObject(Object *object, SDL_Surface* screen);
     Moves an object forward according to its velocity and direction.
 
     @param object the object being moved
+    @param sceen the screen the object is moving on
 */
-void forwardObject(Object *object);
+void forwardObject(Object *object, SDL_Surface* screen);
 
 /**
     Reverses an object according to its velocity and direction.
 
     @param object the object being moved
+    @param sceen the screen the object is moving on
 */
-void reverseObject(Object *object);
+void reverseObject(Object *object, SDL_Surface* screen);
 
 /**
     Rotates an object by the given radians.
