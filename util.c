@@ -24,3 +24,18 @@ float dist(float x1, float y1, float x2, float y2) {
     float dy = y2 - y1;
     return sqrt( dx * dx + dy * dy );
 }
+
+void pacmanBounds(float *x, float *y, int width, int height, int boundary){
+    if(*x < -boundary){
+        *x = width;
+    }
+    if(*x > width + boundary){
+        *x = 0;
+    }
+    if(*y < -boundary){
+        *y = height;
+    }
+    if(*y > height + boundary){
+        *y = 0;
+    }
+}

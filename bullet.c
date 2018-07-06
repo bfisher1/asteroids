@@ -7,6 +7,7 @@
 #include "bullet.h"
 #include <math.h>
 #include "util.h"
+#define BORDER 30
 
 Bullet *createBullet(int x, int y, float direction, float velocity, int range, int radius, Color color){
     Bullet *bullet = (Bullet *) malloc(sizeof(Bullet));
@@ -33,6 +34,8 @@ void moveBullet(Bullet *bullet, SDL_Surface* screen) {
     bullet->distCovered += dist(0, 0, nx, ny);
     bullet->center.x += nx;
     bullet->center.y += ny;
+    pacmanBounds(&bullet->center.x, &bullet->center.y, screen->w, screen->h, BORDER);
+    
 }
 
 bool hasCoveredDist(Bullet *bullet){

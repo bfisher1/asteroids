@@ -8,8 +8,9 @@
     That is, elements are added to the back and removed from the
     front. This queue is generic in the sense that it can store
     any item. It keeps track of pointers to its elements, so this
-    qeueue will only work with elements on the heap or statically
-    stored.
+    qeueue will only work with elements on the heap, statically
+    allocated, or in a function that has not been deleted from the
+    stack.
 
     When this queue dequeues an element, that element is not freed
     autmoatically. The user must take care of freeing these elements

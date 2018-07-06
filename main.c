@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "object.h"
 #include "ship.h"
+#include "asteroid.h"
 #include <SDL/SDL.h>
 #include "util.h"
 #include "bullet.h"
@@ -55,6 +56,7 @@ int main(int argc, char *argv[])
     bool right = false;
     bool gameOver = false;
     Bullet *bullet = NULL;
+    Asteroid *asteroid = createAsteroid(200, 200, 0, 2.0, big);
     Queue *bullets = makeQueue();
     clock_t lastShot = clock();
 
@@ -153,7 +155,8 @@ int main(int argc, char *argv[])
             }
         }
         */
-        
+        forwardObject((Object *) asteroid, screen);
+        drawAsteroid(asteroid, screen);
         drawShip( ship, screen );
 
         delayMs(20);

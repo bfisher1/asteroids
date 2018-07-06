@@ -1,7 +1,12 @@
+/**
+    @file ship.c
+    @author Ben Fisher
+    
+    Definitions for functions related to creating, drawing, and
+    freeing a ship.
+*/
 #include "ship.h"
 #include "bullet.h"
-
-
 
 Ship *createShip(int x, int y, float velocity) {
     Color white = {.r = 255, .g = 255, .b = 255};
@@ -22,7 +27,7 @@ Ship *createShip(int x, int y, float velocity) {
     points[3].y = -16;
     points[4].x = -25;
     points[4].y = -16;
-    
+    //scaling the ship down to half size
     for(int i = 0; i < ptNum; i++){
         points[i].x *= .5;
         points[i].y *= .5;

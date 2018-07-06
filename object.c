@@ -15,6 +15,7 @@
 #include <math.h>
 #include "util.h"
 #include <stdio.h>
+#define BORDER 30
 
 void fillObject(Object *object, int x, int y, Point *points, int ptNum, float velocity, float direction, Color color) {
     object->center.x = x;
@@ -42,14 +43,21 @@ void drawObject(Object *object, SDL_Surface* screen) {
     }
 }
 
+
+
 void forwardObject(Object *object, SDL_Surface* screen) {
     object->center.x +=  object->velocity * cos( object->direction );
     object->center.y +=  object->velocity * sin( object->direction );
+    pacmanBounds(&object->center.x, &object->center.y, screen->w, screen->h, BORDER);
+    
+    
 }
 
 void reverseObject(Object *object, SDL_Surface* screen) {
     object->center.x -= object->velocity * cos( object->direction );
     object->center.y -= object->velocity * sin( object->direction );
+    pacmanBounds(&object->center.x, &object->center.y, screen->w, screen->h, BORDER);
+    
 }
 
 

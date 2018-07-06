@@ -35,7 +35,7 @@ typedef struct {
     Structure for a space object. The points in points are all
     relative to the center point.
 */
-typedef struct ObjectTag {
+typedef struct {
     int pointNum;
     Point *points;
     Point center;

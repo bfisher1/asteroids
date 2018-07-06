@@ -36,4 +36,17 @@ void delayMs(float delay);
     @return the distance between the 2 points
 */
 float dist(float x1, float y1, float x2, float y2);
+
+/**
+    Applies pacman boundaries to cartesian coordinates.
+    If coordinates are outside the width or height, they get set to
+    0. The opposite is true for being negative.
+
+    @param x the x coordinate that may be changed
+    @param y the y coordinate that may be changed
+    @param width the width of the pacman boundaries
+    @param height the height of the pacman boundaries
+    @param boundary how far off this boundaries an item is teleported
+*/
+void pacmanBounds(float *x, float *y, int width, int height, int boundary);
 #endif /* UTIL */

@@ -7,9 +7,9 @@ Asteroids : asteroid.o main.o bullet.o ship.o  util.o object.o graphics.o ./Queu
 
 object.o : object.c  object.h util.h
 
-asteroid.o : asteroid.c asteroid.h object.h
+asteroid.o : asteroid.c asteroid.h object.h util.h
 
-bullet.o : bullet.c bullet.h
+bullet.o : bullet.c bullet.h util.h
 
 ship.o : ship.c ship.h object.h
 
