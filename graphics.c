@@ -6,6 +6,8 @@
     or a rectangle to a screen.
 */
 #include "graphics.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 void setpixel(SDL_Surface *screen, int x, int y, Color color ) {
     int yInv = y * BPP / screen->pitch;
@@ -113,4 +115,47 @@ void drawCircle(SDL_Surface* screen, int x0, int y0, int r, Color color) {
         }
     }
 
+}
+
+Image *loadPPM(char *fileName) {
+    FILE *f = fopen(fileName, "r");
+    fscanf(f, "P3");
+    Image *img = (Image *) malloc(sizeof(Image));
+    fscanf(f, "%d %d", &img->width, &img->height);
+    int colorMax;
+    fscanf(f, "%d", &colorMax);
+    img->grid = (Color **) malloc(sizeof(Color *) * img->height);
+    int r, g, b;
+    
+    for(int i = 0; i < img->height; i++) {
+        img->grid[i] = (Color *) malloc(sizeof(Color) * img->width);
+        for(int j = 0; j < img->width; j++) {
+            fscanf(f, "%d", &r);
+            fscanf(f, "%d", &g);
+            fscanf(f, "%d", &b);
+            
+            img->grid[i][j].r = r;
+            img->grid[i][j].g = g;
+            img->grid[i][j].b = b;
+        }
+    }
+    //first line
+    //if 
+    fclose(f);
+    return img;
+}
+void drawImage(Image *img, SDL_Surface *screen, int x, int y) {
+    for(int i = 0; i < img->width; i++){
+        for(int j = 0; j < img->height; j++){
+            int ytimesw = (j+y)*screen->pitch/BPP;
+            setpixel(screen, i+x, ytimesw, img->grid[j][i]);
+        }
+    }
+}
+void freeImage(Image *img) {
+    for(int i = 0; i < img->height; i++) {
+        free(img->grid[i]);
+    }
+    free(img->grid);
+    free(img);
 }

@@ -35,6 +35,8 @@
 #define MAX_VELOCTY 11.0
 #define SHIP_ACCEL .2
 #define SHIP_DECEL .1
+#define LIVES_X 0
+#define LIVES_Y (HEIGHT - life->height)
 
 /**
     The program's starting point.
@@ -46,8 +48,8 @@
 */
 int main(int argc, char *argv[])
 { 
-
-    printf("%d\n", doLineSegAndRayIntersect(1146, 548, 1203, 548, 604, 560, 604, 548));
+    Image *life = loadPPM("life.ppm");
+    
     SDL_Surface *screen;
     SDL_Event event;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0 ) return 1;
@@ -60,7 +62,7 @@ int main(int argc, char *argv[])
 
     time_t t;
     srand((unsigned) time(&t));
-    
+
     Ship *ship = createShip(SHIP_START_X, SHIP_START_Y, 0);
     Color black = {.r = 0, .g = 0, .b = 0};
     Color white = {.r = 255, .g = 255, .b = 255};
@@ -240,11 +242,16 @@ int main(int argc, char *argv[])
                     shipAlive = shipCanSpawn;
                 }
             }
+            for(int i = 0; i < ship->lives; i++){
+                drawImage(life, screen, LIVES_X + i * life->width, LIVES_Y);
+            }
             
             updateScreen(screen);
             lastUpdate = clock();
         }
 	}
+
+    freeImage(life);
     SDL_Quit();
     freeShip( ship );
     

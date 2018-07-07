@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -std=c99 -g
+CFLAGS = -Wall -std=c99 -g 
 OTHERDIR = ./Queue
 
 Asteroids : asteroid.o main.o bullet.o ship.o  util.o object.o graphics.o ./Queue/queue.o

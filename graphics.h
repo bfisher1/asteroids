@@ -17,6 +17,12 @@ typedef struct {
     Uint8 b;
 } Color;
 
+typedef struct {
+    int width;
+    int height;
+    Color **grid;
+} Image;
+
 //#define WHITE (Color) { .r = 255, .g = 255, .b = 255 }
 
 /**
@@ -76,5 +82,9 @@ void updateScreen(SDL_Surface* screen);
     @param color the color being drawn
 */
 void drawCircle(SDL_Surface* screen, int x0, int y0, int r, Color color);
+
+Image *loadPPM(char *fileName);
+void drawImage(Image *img, SDL_Surface *screen, int x, int y);
+void freeImage(Image *img);
 
 #endif /* GRAPHICS_H */
