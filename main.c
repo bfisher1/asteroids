@@ -21,6 +21,7 @@
 #define HEIGHT 800
 #define DEPTH 32
 #define SECONDS_BETWEEN_SHOTS .5
+#define RESPAWN_DELAY_SECONDS 1.0
 #define BULLET_SPEED 15.0
 #define SHIP_SPEED 10.0
 #define ASTEROID_START_NUM 4
@@ -34,8 +35,6 @@
 #define MAX_VELOCTY 11.0
 #define SHIP_ACCEL .2
 #define SHIP_DECEL .1
-
-//TODO add check for are asteroids in the way
 
 /**
     The program's starting point.
@@ -66,6 +65,8 @@ int main(int argc, char *argv[])
     Color black = {.r = 0, .g = 0, .b = 0};
     Color white = {.r = 255, .g = 255, .b = 255};
     
+    bool shipAlive = false;
+    
     
     bool up = false;
     //bool down = false;
@@ -83,10 +84,8 @@ int main(int argc, char *argv[])
     Queue *bullets = makeQueue();
     clock_t lastShot = clock();
     clock_t lastUpdate = clock();
+    clock_t lastDeath = clock();
 	while(!gameOver) {
-        //int mousex, mousey;
-        //SDL_GetMouseState(&mousex, &mousey);
-        //printf("%d %d\n", mousex, mousey);
         while(SDL_PollEvent(&event)) 
          {      
               switch (event.type) 
@@ -112,7 +111,7 @@ int main(int argc, char *argv[])
                             gameOver = true;
                             break;
                         case SDLK_SPACE:
-                            if( ((float) (clock() - lastShot)) / CLOCKS_PER_SEC >= SECONDS_BETWEEN_SHOTS ) {
+                            if( ((float) (clock() - lastShot)) / CLOCKS_PER_SEC >= SECONDS_BETWEEN_SHOTS && shipAlive) {
                                 Point tip = shipTip(ship);
                                 bullet = createBullet(tip.x, tip.y, ship->orientation, BULLET_SPEED, 600, 3, white);
                                 enqueue(bullets, bullet);
@@ -144,25 +143,21 @@ int main(int argc, char *argv[])
         drawRect(screen, 0, 0, WIDTH, HEIGHT, black);
         if( ( (float) (clock() - lastUpdate)) / CLOCKS_PER_SEC >= REFRESH_RATE ){
             
-            if(left) {
+            if(shipAlive) {
+                if(left) {
                 turnShip(ship,  -SHIP_TURN_SPEED);
+                }
+                else if(right) {
+                    turnShip(ship, SHIP_TURN_SPEED);
+                }
+                if(up) {
+                    accelerateObject((Object *) ship, SHIP_ACCEL, MAX_VELOCTY);
+                } else {
+                    decelerateObject((Object *) ship, ship->velocity * .01 );
+                }
+                
+                moveShip(ship, screen);
             }
-            else if(right) {
-                turnShip(ship, SHIP_TURN_SPEED);
-            }
-
-            if(up) {
-                accelerateObject((Object *) ship, SHIP_ACCEL, MAX_VELOCTY);
-            } else {
-                decelerateObject((Object *) ship, ship->velocity * .01 );
-            }
-            
-            
-            
-            
-            moveShip(ship, screen);
-            
-
             
             
             if(!isQueueEmpty(bullets)) {
@@ -183,11 +178,14 @@ int main(int argc, char *argv[])
                 for(int i = 0; i < queueSize(asteroids); i++){
                     asteroid = (Asteroid *) dequeue(asteroids);
                     forwardObject((Object *) asteroid, screen);
-                    if( !lostLife && objectsColliding((Object *) asteroid, (Object *) ship)) {
+                    //Ship has hit an asteroid
+                    if( !lostLife && objectsColliding((Object *) asteroid, (Object *) ship) && shipAlive ) {
                         ship->lives--;
                         ship->center.x = SHIP_START_X;
                         ship->center.y = SHIP_START_Y;
                         ship->velocity = 0.0;
+                        shipAlive = false;
+                        lastDeath = clock();
                     }
                     drawAsteroid(asteroid, screen);
                     enqueue(asteroids, asteroid);
@@ -222,11 +220,27 @@ int main(int argc, char *argv[])
                 gameOver = true;
             }
 
-            if(up) {
+            if(up && shipAlive) {
                 animateShipFire(ship, screen);
             }
-            drawShip( ship, screen );
-
+            if(shipAlive) {
+                drawShip( ship, screen );
+            } else {
+                if( ((float) (clock() - lastDeath)) / CLOCKS_PER_SEC >= RESPAWN_DELAY_SECONDS ) {
+                    bool shipCanSpawn = true;
+                    for(int i = 0; i < queueSize(asteroids); i++) {
+                        asteroid = (Asteroid *) dequeue(asteroids);
+                        enqueue(asteroids, asteroid);
+                        if( pointRoughlyNearAsteroid(ship->center, asteroid) ) {
+                            shipCanSpawn = false;
+                            break;
+                        }
+                        
+                    }
+                    shipAlive = shipCanSpawn;
+                }
+            }
+            
             updateScreen(screen);
             lastUpdate = clock();
         }

@@ -67,6 +67,18 @@ void drawAsteroid(Asteroid *asteroid, SDL_Surface* screen);
 void freeAsteroid(Asteroid *asteroid);
 
 /**
+    Figures out if a point roughly within distance of an
+    asteroid, that is, within distance of the furthest
+    possible outward point on the asteroid.
+
+    @param the point that might be close to the asteroid
+    @param asteroid the asteroid the point may be near
+
+    @return true if the point is close to the asteroid, false if not
+*/
+bool pointRoughlyNearAsteroid(Point point, Asteroid *asteroid) ;
+
+/**
     Figures out if a bullet is inside the asteroid.
 
     @param bullet the bullet that might be in the asteroid

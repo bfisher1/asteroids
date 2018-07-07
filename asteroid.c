@@ -73,11 +73,10 @@ void freeAsteroid(Asteroid *asteroid) {
     freeObject( (Object *) asteroid );
 }
 
-#include <SDL/SDL.h>
-#include "graphics.h"
 
-bool isBulletInsideAsteroid(Bullet *bullet, Asteroid *asteroid) {
+bool pointRoughlyNearAsteroid(Point point, Asteroid *asteroid) {
     int maxRadius;
+    
     switch(asteroid->size) {
         case big:
             maxRadius = BIG_MAX_AST_RAD;
@@ -89,8 +88,12 @@ bool isBulletInsideAsteroid(Bullet *bullet, Asteroid *asteroid) {
             maxRadius = SMALL_MAX_AST_RAD;
             break;
     }
+    return dist(point.x, point.y, asteroid->center.x, asteroid->center.y) <= maxRadius;
+}
+
+bool isBulletInsideAsteroid(Bullet *bullet, Asteroid *asteroid) {
     Point point = bullet->center;
-    if( dist(point.x, point.y, asteroid->center.x, asteroid->center.y) <= maxRadius ) {
+    if( pointRoughlyNearAsteroid(point, asteroid) ) {
         //through line, line through the center of the asteroid
         float cx = point.x;
         float cy = point.y;
