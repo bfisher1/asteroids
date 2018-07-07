@@ -111,4 +111,33 @@ bool isPtInObject(Point *point, Object (object));
     @param object the object being freed
 */
 void freeObject(Object *object);
+
+/**
+    Determines if 2 objects are colliding.
+
+    @param object1 the first object
+    @param object2 the second object
+    @return true if the objects are colliding, false if not
+*/
+bool objectsColliding(Object *object1, Object *object2);
+
+/**
+    Accelerates an object at the given rate. The object's velocity
+    will not exceed the max velocity. The direction the object
+    accelerates in the direction of the object's orientation.
+
+    @param object the object being accelerated
+    @param rate the rate of acceleration
+    @param max velocity the maximum velocity the object can reach
+*/
+void accelerateObject(Object *object, float rate, float maxVelocity);
+
+/**
+    Decelerates the object at the given rate.
+
+    @param object the object decelerating
+    @param rate the rate the object is decelerating at
+*/
+void decelerateObject(Object *object, float rate);
+
 #endif /* OBJECT_H */

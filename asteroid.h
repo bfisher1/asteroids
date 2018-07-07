@@ -12,6 +12,7 @@
 #include "object.h"
 #include <SDL/SDL.h>
 #include "graphics.h"
+#include "bullet.h"
 
 /**
     Enumeration for asteroid sizes.
@@ -64,5 +65,27 @@ void drawAsteroid(Asteroid *asteroid, SDL_Surface* screen);
     @param asteroid the asteroid being freed
 */
 void freeAsteroid(Asteroid *asteroid);
+
+/**
+    Figures out if a bullet is inside the asteroid.
+
+    @param bullet the bullet that might be in the asteroid
+    @param asteroid the asteroid that may have a bullet in it
+
+    @return true if the bullet is inside the asteroid, false if not
+*/
+bool isBulletInsideAsteroid(Bullet *bullet, Asteroid *asteroid);
+
+/**
+    Creates a smaller child from the given asteroid. It is one size
+    smaller and has a new direction and velocity.
+
+    @param asteroid the asteroid having a child created
+    @param direction the new child asteroid's direction
+    @param velocity the new child asteroid's velocity
+
+    @return the child asteroid
+*/
+Asteroid *makeChildAsteroid(Asteroid *asteroid, float direction, float velocity);
 
 #endif /* ASTEROID_H */

@@ -14,7 +14,11 @@
 #include "object.h"
 #include <SDL/SDL.h>
 #include "graphics.h"
+/** The numerator in the chance for the fire to be drawn. ie the 3 in 3/10 */
+#define FIRE_FLICKER_CHANCE_NUM 3
 
+/** The denominator in the chance for the fire to be drawn. ie the 10 in 3/10 */
+#define FIRE_FLICKER_CHANCE_DEN 10
 /**
     Structure for a ship. 'Extends' object.
 */
@@ -27,11 +31,7 @@ typedef struct {
     float orientation;
     Color color;
     int lives;
-    float fireTimerMs;
-    clock_t lastFire;
     Object *fire;
-    float bulletTimerMs;
-    clock_t lastBullet;
 } Ship;
 
 /**
@@ -69,4 +69,32 @@ void freeShip(Ship *ship);
     @return the point where the ship's tip is
 */
 Point shipTip(Ship *ship);
+
+/**
+    Animates the ship's fire by only drawing it randomly.
+    The chance to draw it is determined by the FIRE_FLICKER_CHANCE
+    macros.
+
+    @param ship the ship whose fire is being drawn
+    @param screen the screen the fire is being animated on
+*/
+void animateShipFire(Ship *ship, SDL_Surface* screen);
+
+/**
+    Moves the ship across the screen, according to its velocity and
+    direction.
+
+    @param ship the ship being moved
+    @param screen the screen the ship is being moved across
+*/
+void moveShip(Ship *ship, SDL_Surface* screen);
+
+/**
+    Turns the ship by the given amount.
+
+    @param ship the ship being turned
+    @param radians the amount the ship is turning
+*/
+void turnShip(Ship *ship, float radians);
+
 #endif /* SHIP_H */
