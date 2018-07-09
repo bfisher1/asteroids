@@ -83,8 +83,30 @@ void updateScreen(SDL_Surface* screen);
 */
 void drawCircle(SDL_Surface* screen, int x0, int y0, int r, Color color);
 
+/**
+    Loads a ppm file into an image.
+
+    @param filename the name of the ppm file being read from
+    
+    @return the image in the file
+*/
 Image *loadPPM(char *fileName);
+
+/**
+    Draws an image to the given screen, offset by x and y.
+
+    @param img the image being drawn
+    @param screen the screen the image is being drawn on
+    @param x the amount of horizontal offset the image is rendered at
+    @param y the amount of vertical offset the image is rendered at
+*/
 void drawImage(Image *img, SDL_Surface *screen, int x, int y);
+
+/**
+    Frees an image from memory.
+
+    @param img the image being freed.
+*/
 void freeImage(Image *img);
 
 #endif /* GRAPHICS_H */

@@ -251,6 +251,12 @@ int main(int argc, char *argv[])
         }
 	}
 
+    if(isQueueEmpty(asteroids)){
+        printf("YOU WIN!\n");
+    } else {
+        printf("YOU LOST\n");
+    }
+
     freeImage(life);
     SDL_Quit();
     freeShip( ship );
